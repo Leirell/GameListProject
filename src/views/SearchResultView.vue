@@ -29,23 +29,20 @@ const callback = async () => {
   if (!ready) return
   ready = false
 
-  //
   await Promise.all(
     //con el .map iteramos por el json de gameData para poder hacer la peticion de covers en paralelo
     gameData.response.map(async (game) => {
-      const coverRequest = await fetch(`/v1/api/game/cover/${game.cover}`, { method: 'POST' })
-      const coverData = await coverRequest.json()
-
-      const url = coverData.response[0].url.replace('t_thumb', 't_cover_big')
+      let url = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png'
+      if (game.cover != null) {
+        const coverRequest = await fetch(`/v1/api/game/cover/${game.cover}`, { method: 'POST' })
+        const coverData = await coverRequest.json()
+        url = coverData.response[0].url.replace('t_thumb', 't_cover_big')
+      }
 
       gamesList.value.push({
         name: game.name,
         cover: url
       })
-
-      console.log(coverData.response.url)
-      console.log(game)
-      console.log(coverData)
     })
   )
   ready = true

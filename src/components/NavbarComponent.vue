@@ -17,14 +17,14 @@
         >
           <li>
             <a
-              href="#"
+              href="/login"
               class="block py-2 px-3 rounded md:border-0 md:p-0 md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent text-slate-400"
               >Login</a
             >
           </li>
           <li>
             <a
-              href="#"
+              href="/sign-up"
               class="block py-2 px-3 rounded md:border-0 md:p-0 md:hover:text-blue-500 hover:bg-gray-700 md:hover:bg-transparent text-slate-400"
               >Sign Up</a
             >

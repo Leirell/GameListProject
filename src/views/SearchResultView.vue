@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row justify-center flex-wrap w-2/3 m-auto">
-    <div v-for="e in gamesList" :key="e.name">
-      <GameSearchComponent :name="e.name" :cover="e.cover" />
+    <div v-for="e in gamesList" :key="e.id">
+      <GameSearchComponent :name="e.name" :cover="e.cover" :id="e.id" />
     </div>
   </div>
 </template>
@@ -29,22 +29,18 @@ const callback = async () => {
   if (!ready) return
   ready = false
 
-  await Promise.all(
-    //con el .map iteramos por el json de gameData para poder hacer la peticion de covers en paralelo
-    gameData.response.map(async (game) => {
-      let url = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png'
-      if (game.cover != null) {
-        const coverRequest = await fetch(`/v1/api/game/cover/${game.cover}`, { method: 'POST' })
-        const coverData = await coverRequest.json()
-        url = coverData.response[0].url.replace('t_thumb', 't_cover_big')
-      }
+  gameData.response.forEach((game) => {
+    let url = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png'
+    if (game.cover != null) {
+      url = game.cover.url.replace('t_thumb', 't_cover_big')
+    }
 
-      gamesList.value.push({
-        name: game.name,
-        cover: url
-      })
+    gamesList.value.push({
+      name: game.name,
+      cover: url,
+      id: game.id
     })
-  )
+  })
   ready = true
 }
 

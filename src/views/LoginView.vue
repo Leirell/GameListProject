@@ -49,7 +49,13 @@ export default {
                 });
 
                 if (loginRequest.ok) {
-                    // Si la solicitud es exitosa, redirigir a otra ruta
+                    const response = await loginRequest.json();
+                    const token = response.response.token;
+
+                    // Almacenar el token en el local storage
+                    sessionStorage.setItem('authToken', token);
+
+                    // Redirigir a otra ruta
                     this.$router.push('/');
                 } else {
                     // Si la solicitud falla, mostrar un mensaje de error

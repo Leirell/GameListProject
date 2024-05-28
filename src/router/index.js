@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import SearchResultView from '@/views/SearchResultView.vue'
 import Login from '@/views/LoginView.vue'
 import SignUp from '@/views/SignUpView.vue'
+import GameFileView from '@/views/GameFileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,13 +20,19 @@ const router = createRouter({
     },
     {
       path: '/login',
-      name: 'Login',
+      name: 'login',
       component: Login
     },
     {
       path: '/sign-up',
-      name: 'SignUp',
+      name: 'signUp',
       component: SignUp
+    },
+    {
+      path: '/game/:id?',
+      name: 'gameFile',
+      component: GameFileView,
+      props: true
     }
   ]
 })

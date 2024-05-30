@@ -22,7 +22,6 @@
                     to="/sign-up">Sign up</router-link>
             </p>
         </div>
-
     </div>
 </template>
 
@@ -52,8 +51,9 @@ export default {
                     const response = await loginRequest.json();
                     const token = response.response.token;
 
-                    // Almacenar el token en el local storage
+                    // Almacenar el token y el username en el session storage
                     sessionStorage.setItem('authToken', token);
+                    sessionStorage.setItem('username', this.userData.username);
 
                     // Redirigir a otra ruta
                     this.$router.push('/');

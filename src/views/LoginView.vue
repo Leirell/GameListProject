@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/authStore'
+
 export default {
     data() {
         return {
@@ -51,9 +53,11 @@ export default {
                     const response = await loginRequest.json();
                     const token = response.response.token;
 
+                    
+                    // Usar el store para manejar el estado de autenticación
+                    const { login } = useAuthStore()
                     // Almacenar el token y el username en el session storage
-                    sessionStorage.setItem('authToken', token);
-                    sessionStorage.setItem('username', this.userData.username);
+                    login(token, this.userData.username)
 
                     // Redirigir a otra ruta
                     this.$router.push('/');

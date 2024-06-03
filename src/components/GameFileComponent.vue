@@ -19,11 +19,11 @@
         </div>
         <div class="m-4 mb-0">
           <button
-            @click="saveGame"
+            @click="toggleGameInList"
             type="submit"
             class="w-full p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Add to list
+            {{ isGameInList ? 'Remove from list' : 'Add to list' }}
           </button>
         </div>
       </div>
@@ -121,7 +121,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import GameImageComponent from '@/components/GameImageComponent.vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
@@ -149,7 +149,38 @@ const props = defineProps({
 const game = ref({})
 const artworkUrl = ref({})
 const screenshotUrl = ref({})
-const dlcs = ref({})
+const dlcs = ref([])
+const isGameInList = ref(false)
+
+const username = sessionStorage.getItem('username')
+if (!username) {
+  console.error('No username found in session storage')
+} else {
+  // Verificar si el juego ya está en la lista del usuario
+  const checkGameInList = async () => {
+    try {
+      const response = await fetch(`/v1/api/userGame/user/games/${username}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...authHeader()
+        }
+      })
+      const data = await response.json()
+      if (response.ok) {
+        isGameInList.value = data.response.some((g) => g.id === game.value.id)
+      } else {
+        console.error('Error checking game in list:', data)
+      }
+    } catch (error) {
+      console.error('Error checking game in list:', error)
+    }
+  }
+
+  onMounted(async () => {
+    await checkGameInList()
+  })
+}
 
 const gameRequest = await fetch(`/v1/api/game/searchById/${props.id}`, {
   method: 'POST'
@@ -190,14 +221,9 @@ dlcs.value = dlcs.value.concat(
 )
 
 const saveGame = async () => {
-  const username = sessionStorage.getItem('username')
-  if (!username) {
-    console.error('No username found in session storage')
-    return
-  }
   try {
     const saveGameData = {
-      id: game.value.id,
+      idGame: game.value.id,
       name: game.value.name,
       cover: game.value.cover,
       genres: game.value.genres,
@@ -206,7 +232,6 @@ const saveGame = async () => {
       rating: game.value.rating,
       username: username
     }
-    console.log(props.id)
     const response = await fetch('/v1/api/userGame/save', {
       method: 'POST',
       headers: {
@@ -218,11 +243,41 @@ const saveGame = async () => {
     const data = await response.json()
     if (response.ok) {
       console.log('Game saved successfully:', data)
+      isGameInList.value = true
     } else {
       console.error('Error saving game:', data)
     }
   } catch (error) {
     console.error('Error saving game:', error)
+  }
+}
+
+const removeGame = async () => {
+  try {
+    const response = await fetch(`/v1/api/userGame/delete/${game.value.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        ...authHeader() // Agregar el token a los headers
+      }
+    })
+    const data = await response.json()
+    if (response.ok) {
+      console.log('Game removed successfully:', data)
+      isGameInList.value = false
+    } else {
+      console.error('Error removing game:', data)
+    }
+  } catch (error) {
+    console.error('Error removing game:', error)
+  }
+}
+
+const toggleGameInList = () => {
+  if (isGameInList.value) {
+    removeGame()
+  } else {
+    saveGame()
   }
 }
 </script>

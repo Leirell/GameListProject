@@ -223,7 +223,7 @@ dlcs.value = dlcs.value.concat(
 const saveGame = async () => {
   try {
     const saveGameData = {
-      idGame: game.value.id,
+      id: game.value.id,
       name: game.value.name,
       cover: game.value.cover,
       genres: game.value.genres,

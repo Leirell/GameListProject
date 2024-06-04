@@ -19,11 +19,26 @@
         </div>
         <div class="m-4 mb-0">
           <button
-            @click="toggleGameInList"
-            type="submit"
+            @click="toggleForm"
+            type="button"
             class="w-full p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             {{ isGameInList ? 'Remove from list' : 'Add to list' }}
+          </button>
+        </div>
+        <div v-if="showForm" class="m-4">
+          <label for="grade" class="block text-white">Grade:</label>
+          <input v-model="grade" type="number" id="grade" min="0" max="100" class="w-full p-2 rounded" />
+          <label for="review" class="block text-white mt-2">Review:</label>
+          <textarea v-model="review" id="review" rows="4" class="w-full p-2 rounded"></textarea>
+          <label for="date" class="block text-white mt-2">Date Completed:</label>
+          <input v-model="dateCompleted" type="date" id="date" class="w-full p-2 rounded" />
+          <button
+            @click="saveGame"
+            type="submit"
+            class="w-full mt-4 p-2.5 text-sm font-medium text-white bg-green-700 rounded-lg border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          >
+            Save
           </button>
         </div>
       </div>
@@ -151,6 +166,10 @@ const artworkUrl = ref({})
 const screenshotUrl = ref({})
 const dlcs = ref([])
 const isGameInList = ref(false)
+const showForm = ref(false)
+const grade = ref(0)
+const review = ref('')
+const dateCompleted = ref(new Date().toISOString().substr(0, 10))
 
 const username = sessionStorage.getItem('username')
 if (!username) {
@@ -192,7 +211,6 @@ let url = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.p
 if (gameData.cover != null) {
   url = gameData.cover.url.replace('t_thumb', 't_cover_big')
 }
-console.log(gameData.name, gameData.cover, props.id)
 game.value = {
   name: gameData.name,
   cover: url,
@@ -212,7 +230,6 @@ screenshotUrl.value = gameData.screenshots
 dlcs.value = gameData.dlcs
   ? gameData.dlcs.map((dlc) => dlc.cover.url.replace('t_thumb', 't_1080p'))
   : []
-console.log(screenshotUrl)
 
 dlcs.value = dlcs.value.concat(
   gameData.expansions
@@ -230,7 +247,10 @@ const saveGame = async () => {
       platforms: game.value.platforms,
       summary: game.value.summary.substring(0, 5000),
       rating: game.value.rating,
-      username: username
+      username: username,
+      grade: grade.value,
+      review: review.value,
+      dateCompleted: dateCompleted.value
     }
     const response = await fetch('/v1/api/userGame/save', {
       method: 'POST',
@@ -244,6 +264,7 @@ const saveGame = async () => {
     if (response.ok) {
       console.log('Game saved successfully:', data)
       isGameInList.value = true
+      showForm.value = false
     } else {
       console.error('Error saving game:', data)
     }
@@ -265,6 +286,7 @@ const removeGame = async () => {
     if (response.ok) {
       console.log('Game removed successfully:', data)
       isGameInList.value = false
+      showForm.value = false
     } else {
       console.error('Error removing game:', data)
     }
@@ -273,11 +295,11 @@ const removeGame = async () => {
   }
 }
 
-const toggleGameInList = () => {
+const toggleForm = () => {
   if (isGameInList.value) {
     removeGame()
   } else {
-    saveGame()
+    showForm.value = !showForm.value
   }
 }
 </script>

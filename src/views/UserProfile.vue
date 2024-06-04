@@ -6,19 +6,23 @@
       <p class="flex flex-row flex-wrap m-auto text-white"><strong>Username:</strong> {{ user.username }}</p>
       <p class="flex flex-row flex-wrap m-auto text-white"><strong>Email:</strong> {{ user.email }}</p>
     </div>
-    <div class="user-games text-white">
+    <div class="mt-6 text-white text-center w-2/3 m-auto">
       <h2 class="text-2xl font-semibold mb-2">Saved Games</h2>
-      <div class="flex m-auto text-white">
-        <div v-for="game in userGames" :key="game.id" class="game-item">
+      <div class="flex mt-5 bg-slate-700 h-80">
+        <div v-for="game in limitedUserGames" :key="game.id" class="game-item">
           <GameSearchComponent :name="game.name" :cover="game.cover" :id="game.id" />
         </div>
       </div>
+      <button @click="viewAllGames" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        View All Games
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import GameSearchComponent from '@/components/GameSearchComponent.vue'
 import { authHeader } from '@/stores/helpers.js'
 
@@ -26,6 +30,9 @@ import { authHeader } from '@/stores/helpers.js'
 const user = ref({})
 const userGames = ref([])
 const errorMessage = ref('')
+
+// Computed property para obtener los últimos 5 juegos
+const limitedUserGames = computed(() => userGames.value.slice(0, 5))
 
 const fetchUserProfile = async () => {
   const username = sessionStorage.getItem('username')
@@ -74,6 +81,15 @@ const fetchUserProfile = async () => {
     console.error('Error fetching user profile or games:', error)
     errorMessage.value = error.message
   }
+}
+
+// Configurar el router
+const router = useRouter()
+
+// Función para manejar la navegación
+const viewAllGames = () => {
+  const username = sessionStorage.getItem('username')
+  router.push({ name: 'all-games', params: { username } })
 }
 
 // Ejecutar la función fetchUserProfile al montar el componente

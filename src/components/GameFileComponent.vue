@@ -273,9 +273,36 @@ const saveGame = async () => {
   }
 }
 
+const getGameId = async () => {
+  try {
+    const response = await fetch(`/v1/api/userGame/user/game/${username}/${game.value.id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...authHeader() // Agregar el token a los headers
+      }
+    });
+    const data = await response.json();
+    if (response.ok) {
+      return data.response.idGame; // Asumiendo que esta es la estructura de la respuesta
+    } else {
+      console.error('Error fetching game ID:', data)
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching game ID:', error)
+    return null;
+  }
+};
+
 const removeGame = async () => {
   try {
-    const response = await fetch(`/v1/api/userGame/delete/${game.value.id}`, {
+    const gameId = await getGameId();
+    if (!gameId) {
+      console.error('Game ID not found');
+      return;
+    }
+    const response = await fetch(`/v1/api/userGame/delete/${gameId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -295,9 +322,9 @@ const removeGame = async () => {
   }
 }
 
-const toggleForm = () => {
+const toggleForm = async () => {
   if (isGameInList.value) {
-    removeGame()
+    await removeGame()
   } else {
     showForm.value = !showForm.value
   }

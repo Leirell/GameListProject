@@ -16,6 +16,9 @@
         </div>
         <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Changes</button>
       </form>
+      <div v-if="successMessage" class="mt-4 p-4 bg-green-500 text-white rounded">
+        {{ successMessage }}
+      </div>
     </div>
   </template>
   
@@ -29,15 +32,17 @@
   const grade = ref(0)
   const review = ref('')
   const dateCompleted = ref('')
+  const successMessage = ref('')
   
   const route = useRoute()
   const router = useRouter()
   
   const fetchGameDetails = async () => {
-    const gameId = route.params.id
+    const { id } = route.params
+    const username = sessionStorage.getItem('username')
   
     try {
-      const gameRequest = await fetch(`/v1/api/userGame/game/${gameId}`, {
+      const gameRequest = await fetch(`/v1/api/userGame/user/game/${username}/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -61,9 +66,9 @@
   
   const saveChanges = async () => {
     try {
-      const gameId = route.params.id
+      const gameId = game.value.idGame
       const gameData = {
-        id: gameId,
+        id: game.value.id,
         grade: grade.value,
         review: review.value,
         dateCompleted: dateCompleted.value
@@ -82,7 +87,11 @@
         throw new Error('Failed to save changes')
       }
   
-      router.push({ name: 'user-profile' })
+      successMessage.value = 'Changes saved successfully!'
+      setTimeout(() => {
+        successMessage.value = ''
+        router.push({ name: 'user-profile' })
+      }, 3000)
     } catch (error) {
       console.error('Error saving changes:', error)
     }

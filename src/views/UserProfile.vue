@@ -81,8 +81,9 @@ const fetchUserProfile = async () => {
 const router = useRouter()
 
 // Función para manejar la navegación
-const navigateToEdit = (gameId) => {
-  router.push({ name: 'game-edit', params: { id: gameId } })
+const navigateToEdit = (id) => {
+  const username = user.value.username
+  router.push({ name: 'game-edit', params: { id, username } })
 }
 
 const viewAllGames = () => {

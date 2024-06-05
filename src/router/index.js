@@ -6,6 +6,7 @@ import SignUp from '@/views/SignUpView.vue'
 import GameFileView from '@/views/GameFileView.vue'
 import Profile from '@/views/UserProfile.vue'
 import AllGames from '@/views/AllGames.vue'
+import GameEditView from '@/views/GameEditView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,11 @@ const router = createRouter({
       path: '/profile/games/:username',
       name: 'all-games',
       component: AllGames
+    },
+    {
+      path: '/profile/game/edit/:id',
+      name: 'game-edit',
+      component: GameEditView
     }
   ]
 })

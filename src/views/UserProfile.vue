@@ -1,7 +1,6 @@
 <template>
   <div class="user-profile">
-    <h1 class="flex flex-row justify-center flex-wrap m-auto text-white text-center text-3xl font-bold mb-4">User
-      Profile</h1>
+    <h1 class="flex flex-row justify-center flex-wrap m-auto text-white text-center text-3xl font-bold mb-4">User Profile</h1>
     <div class="user-info mb-4">
       <p class="flex flex-row flex-wrap m-auto text-white"><strong>Username:</strong> {{ user.username }}</p>
       <p class="flex flex-row flex-wrap m-auto text-white"><strong>Email:</strong> {{ user.email }}</p>
@@ -9,7 +8,7 @@
     <div class="mt-6 text-white text-center w-2/3 m-auto">
       <h2 class="text-2xl font-semibold mb-2">Saved Games</h2>
       <div class="flex mt-5 bg-slate-700 h-80">
-        <div v-for="game in limitedUserGames" :key="game.id" class="game-item">
+        <div v-for="game in limitedUserGames" :key="game.id" class="game-item" @click="navigateToEdit(game.id)">
           <GameSearchComponent :name="game.name" :cover="game.cover" :id="game.id" />
         </div>
       </div>
@@ -56,7 +55,6 @@ const fetchUserProfile = async () => {
     }
 
     const userData = await userRequest.json()
-    console.log('User data:', userData)
     user.value = userData.response
 
     // Petición para obtener los juegos guardados del usuario
@@ -73,12 +71,8 @@ const fetchUserProfile = async () => {
     }
 
     const gamesData = await gamesRequest.json()
-    console.log('Games data:', gamesData)
     userGames.value = gamesData.response
-
-    console.log('User games:', userGames.value)
   } catch (error) {
-    console.error('Error fetching user profile or games:', error)
     errorMessage.value = error.message
   }
 }
@@ -87,6 +81,10 @@ const fetchUserProfile = async () => {
 const router = useRouter()
 
 // Función para manejar la navegación
+const navigateToEdit = (gameId) => {
+  router.push({ name: 'game-edit', params: { id: gameId } })
+}
+
 const viewAllGames = () => {
   const username = sessionStorage.getItem('username')
   router.push({ name: 'all-games', params: { username } })

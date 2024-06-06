@@ -28,7 +28,7 @@
         </div>
         <div v-if="showForm" class="m-4">
           <label for="grade" class="block text-white">Grade:</label>
-          <input v-model="grade" type="number" id="grade" min="0" max="100" class="w-full p-2 rounded" />
+          <input v-model="grade" type="number" id="grade" min="0" max="10" class="w-full p-2 rounded" />
           <label for="review" class="block text-white mt-2">Review:</label>
           <textarea v-model="review" id="review" rows="4" class="w-full p-2 rounded"></textarea>
           <label for="date" class="block text-white mt-2">Date Completed:</label>

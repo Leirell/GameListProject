@@ -22,7 +22,7 @@
       <form v-else @submit.prevent="saveChanges" class="space-y-4">
         <div class="form-group">
           <label for="grade" class="text-white block mb-2">Grade:</label>
-          <input type="number" v-model="grade" id="grade"
+          <input type="number" min="0" max="10" v-model="grade" id="grade"
             class="form-control w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded" />
         </div>
         <div class="form-group">

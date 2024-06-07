@@ -1,6 +1,6 @@
 <template>
   <div class="user-profile max-w-6xl mx-auto p-4">
-    <h1 class="text-white text-center text-4xl font-bold mb-6">User Profile</h1>
+    <h1 class="text-white text-center text-4xl font-bold mb-6">{{ user.username }}'s Profile</h1>
     <div class="user-info bg-gray-800 p-4 rounded-lg shadow-md mb-6">
       <p class="text-white text-lg mb-2"><strong>Username:</strong> {{ user.username }}</p>
       <p class="text-white text-lg"><strong>Email:</strong> {{ user.email }}</p>

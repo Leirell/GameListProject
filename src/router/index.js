@@ -5,7 +5,6 @@ import Login from '@/views/LoginView.vue'
 import SignUp from '@/views/SignUpView.vue'
 import GameFileView from '@/views/GameFileView.vue'
 import Profile from '@/views/UserProfile.vue'
-import AllGames from '@/views/AllGames.vue'
 import GameEditView from '@/views/GameEditView.vue'
 
 const router = createRouter({
@@ -41,11 +40,6 @@ const router = createRouter({
     path: '/profile',
     name: 'profile',
     component: Profile
-    },
-    {
-      path: '/profile/games/:username',
-      name: 'all-games',
-      component: AllGames
     },
     {
       path: '/profile/game/edit/:id',

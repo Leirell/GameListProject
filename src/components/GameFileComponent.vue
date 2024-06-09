@@ -1,10 +1,7 @@
 <template>
-  <div
-    :style="[
-      `background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('${artworkUrl}')`
-    ]"
-    class="bg-no-repeat bg-cover"
-  >
+  <div :style="[
+    `background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('${artworkUrl}')`
+  ]" class="bg-no-repeat bg-cover">
     <div class="flex flex-wrap w-2/3 m-auto">
       <div class="flex flex-col">
         <div class="text-wrap text-4xl font-semibold text-white m-3">
@@ -18,74 +15,34 @@
           <GameImageComponent :cover="game.cover" class="m-4" />
         </div>
         <div class="m-4 mb-0">
-          <button
-            @click="toggleForm"
-            type="button"
-            class="w-full p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
+          <button @click="toggleForm" type="button"
+            class="w-full p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             {{ isGameInList ? 'Remove from list' : 'Add to list' }}
-          </button>
-        </div>
-        <div v-if="showForm" class="m-4">
-          <label for="grade" class="block text-white">Grade:</label>
-          <input v-model="grade" type="number" id="grade" min="0" max="10" class="w-full p-2 rounded" />
-          <label for="review" class="block text-white mt-2">Review:</label>
-          <textarea v-model="review" id="review" rows="4" class="w-full p-2 rounded"></textarea>
-          <label for="date" class="block text-white mt-2">Date Completed:</label>
-          <input v-model="dateCompleted" type="date" id="date" class="w-full p-2 rounded" />
-          <button
-            @click="saveGame"
-            type="submit"
-            class="w-full mt-4 p-2.5 text-sm font-medium text-white bg-green-700 rounded-lg border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-          >
-            Save
           </button>
         </div>
       </div>
 
       <div class="flex flex-col w-[410px] m-4">
-        <swiper
-          :style="{
-            '--swiper-navigation-color': '#fff',
-            '--swiper-pagination-color': '#fff'
-          }"
-          :spaceBetween="10"
-          :navigation="true"
-          :thumbs="{ swiper: thumbsSwiper }"
-          :slidesPerView="auto"
-          :modules="modules"
-          class="w-full"
-        >
-          <swiper-slide v-for="screenshot in screenshotUrl" :key="screenshot"
-            ><img class="object-fill rounded-md w-full h-60" :src="screenshot"
-          /></swiper-slide>
+        <swiper :style="{
+          '--swiper-navigation-color': '#fff',
+          '--swiper-pagination-color': '#fff'
+        }" :spaceBetween="10" :navigation="true" :thumbs="{ swiper: thumbsSwiper }" :slidesPerView="auto"
+          :modules="modules" class="w-full">
+          <swiper-slide v-for="screenshot in screenshotUrl" :key="screenshot"><img
+              class="object-fill rounded-md w-full h-60" :src="screenshot" /></swiper-slide>
         </swiper>
-        <swiper
-          @swiper="onSwiper2"
-          :autoHeight="true"
-          :slidesPerView="5"
-          :freeMode="true"
-          :watchSlidesProgress="true"
-          :modules="modules"
-          class="w-full"
-        >
-          <swiper-slide v-for="screenshot in screenshotUrl" :key="screenshot"
-            ><img class="w-[75px] h-[50px] rounded-md" :src="screenshot"
-          /></swiper-slide>
+        <swiper @swiper="onSwiper2" :autoHeight="true" :slidesPerView="5" :freeMode="true" :watchSlidesProgress="true"
+          :modules="modules" class="w-full">
+          <swiper-slide v-for="screenshot in screenshotUrl" :key="screenshot"><img class="w-[75px] h-[50px] rounded-md"
+              :src="screenshot" /></swiper-slide>
         </swiper>
 
         <div class="">
           <div class="flex flex-row text-wrap font-semibold text-white m-5 ml-0">
-            <div
-              v-if="game.rating > 70"
-              class="ml-0 px-4 py-4 rounded-md text text-4xl bg-green-500"
-            >
+            <div v-if="game.rating > 70" class="ml-0 px-4 py-4 rounded-md text text-4xl bg-green-500">
               {{ game.rating }}
             </div>
-            <div
-              v-else-if="game.rating > 50"
-              class="ml-0 px-5 py-5 rounded-md text text-4xl bg-orange-500"
-            >
+            <div v-else-if="game.rating > 50" class="ml-0 px-5 py-5 rounded-md text text-4xl bg-orange-500">
               {{ game.rating }}
             </div>
             <div v-else class="ml-0 px-5 py-5 rounded-md text text-4xl bg-red-500">
@@ -112,27 +69,43 @@
   <div v-if="dlcs.length > 0" class="flex flex-col w-2/3 m-auto mt-4 text-white">
     <div class="underline">More for {{ game.name }}</div>
     <div class="flex flex-col mt-2 bg-slate-700 p-2 rounded-md">
-      <swiper
-        :style="{
-          '--swiper-navigation-color': '#fff',
-          '--swiper-pagination-color': '#fff'
-        }"
-        @swiper="onSwiperDlcs"
-        :spaceBetween="10"
-        :navigation="true"
-        :autoHeight="true"
-        :slidesPerView="5"
-        :freeMode="true"
-        :watchSlidesProgress="true"
-        :modules="modules"
-        class="w-full"
-      >
-        <swiper-slide v-for="dlc in dlcs" :key="dlc"
-          ><img class="w-[124px] h-[165px] rounded-md" :src="dlc"
-        /></swiper-slide>
+      <swiper :style="{
+        '--swiper-navigation-color': '#fff',
+        '--swiper-pagination-color': '#fff'
+      }" @swiper="onSwiperDlcs" :spaceBetween="10" :navigation="true" :autoHeight="true" :slidesPerView="5"
+        :freeMode="true" :watchSlidesProgress="true" :modules="modules" class="w-full">
+        <swiper-slide v-for="dlc in dlcs" :key="dlc"><img class="w-[124px] h-[165px] rounded-md"
+            :src="dlc" /></swiper-slide>
       </swiper>
     </div>
   </div>
+
+  <transition name="fade">
+    <div v-if="showForm" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md mx-auto">
+        <h2 class="text-2xl font-semibold text-white mb-4">Game Details</h2>
+        <label for="grade" class="block text-white mb-2">Grade:</label>
+        <input v-model="grade" type="number" id="grade" min="0" max="10"
+          class="w-full p-2 mb-4 rounded bg-gray-700 border border-gray-600 text-white" />
+        <label for="review" class="block text-white mb-2">Review:</label>
+        <textarea v-model="review" id="review" rows="4"
+          class="w-full p-2 mb-4 rounded bg-gray-700 border border-gray-600 text-white"></textarea>
+        <label for="date" class="block text-white mb-2">Date Completed:</label>
+        <input v-model="dateCompleted" type="date" id="date"
+          class="w-full p-2 mb-4 rounded bg-gray-700 border border-gray-600 text-white" />
+        <div class="flex justify-end space-x-4">
+          <button @click="toggleForm" type="button"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+            Cancel
+          </button>
+          <button @click="saveGame" type="submit"
+            class="px-4 py-2 text-sm font-medium text-white bg-green-700 rounded-lg border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script setup>
@@ -330,3 +303,15 @@ const toggleForm = async () => {
   }
 }
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

@@ -3,7 +3,7 @@
     <div class="text-center mb-6">
       <GameSearchComponent :name="game.name" :cover="game.cover" :id="game.id" />
     </div>
-    <div class="bg-gray-800 p-4 rounded-lg shadow-md space-y-4">
+    <div class="bg-gray-700 p-4 rounded-lg shadow-md space-y-4">
       <div v-if="!isEditing">
         <p class="text-white text-lg mb-2"><strong>Grade:</strong> {{ grade }}</p>
         <p class="text-white text-lg mb-2"><strong>Review:</strong> {{ review }}</p>
@@ -23,17 +23,17 @@
         <div class="form-group">
           <label for="grade" class="text-white block mb-2">Grade:</label>
           <input type="number" min="0" max="10" v-model="grade" id="grade"
-            class="form-control w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded" />
+            class="w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded" />
         </div>
         <div class="form-group">
           <label for="review" class="text-white block mb-2">Review:</label>
           <textarea v-model="review" id="review"
-            class="form-control w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded"></textarea>
+            class="w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded"></textarea>
         </div>
         <div class="form-group">
           <label for="dateCompleted" class="text-white block mb-2">Date Completed:</label>
           <input type="date" v-model="dateCompleted" id="dateCompleted"
-            class="form-control w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded" />
+            class="w-full px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded" />
         </div>
         <div class="flex justify-end space-x-2">
           <button type="submit"
@@ -142,105 +142,3 @@ onMounted(() => {
   fetchGameDetails()
 })
 </script>
-
-<style scoped>
-.game-edit {
-  max-width: 768px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-control {
-  width: 100%;
-  padding: 0.75rem;
-  margin-top: 0.25rem;
-  background-color: #2d3748;
-  color: white;
-  border: 1px solid #4a5568;
-  border-radius: 0.375rem;
-}
-
-.bg-gray-800 {
-  background-color: #2d3748;
-}
-
-.text-white {
-  color: #fff;
-}
-
-.bg-blue-500 {
-  background-color: #4299e1;
-}
-
-.bg-blue-700 {
-  background-color: #2b6cb0;
-}
-
-.bg-red-500 {
-  background-color: #f56565;
-}
-
-.bg-red-700 {
-  background-color: #c53030;
-}
-
-.bg-green-500 {
-  background-color: #48bb78;
-}
-
-.bg-gray-500 {
-  background-color: #a0aec0;
-}
-
-.bg-gray-700 {
-  background-color: #4a5568;
-}
-
-.hover\:bg-blue-700:hover {
-  background-color: #2b6cb0;
-}
-
-.hover\:bg-red-700:hover {
-  background-color: #c53030;
-}
-
-.hover\:bg-gray-700:hover {
-  background-color: #4a5568;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
-
-.mt-4 {
-  margin-top: 1rem;
-}
-
-.p-4 {
-  padding: 1rem;
-}
-
-.p-2 {
-  padding: 0.5rem;
-}
-
-.rounded {
-  border-radius: 0.375rem;
-}
-
-.shadow-md {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.transition-colors {
-  transition: background-color 0.2s;
-}
-</style>

@@ -15,7 +15,7 @@
           <GameImageComponent :cover="game.cover" class="m-4" />
         </div>
         <div class="m-4 mb-0">
-          <button @click="toggleForm" type="button"
+          <button @click="handleButtonClick" type="button"
             class="w-full p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             {{ isGameInList ? 'Remove from list' : 'Add to list' }}
           </button>
@@ -110,6 +110,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import GameImageComponent from '@/components/GameImageComponent.vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
@@ -144,7 +145,9 @@ const grade = ref(0)
 const review = ref('')
 const dateCompleted = ref(new Date().toISOString().substr(0, 10))
 
+const router = useRouter()
 const username = sessionStorage.getItem('username')
+
 if (!username) {
   console.error('No username found in session storage')
 } else {
@@ -302,16 +305,12 @@ const toggleForm = async () => {
     showForm.value = !showForm.value
   }
 }
+
+const handleButtonClick = () => {
+  if (!username) {
+    router.push('/login')
+  } else {
+    toggleForm()
+  }
+}
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

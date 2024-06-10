@@ -1,27 +1,29 @@
 <template>
-  <div class="user-profile max-w-6xl mx-auto p-4">
+  <div class="max-w-6xl mx-auto p-4">
     <h1 class="text-white text-center text-4xl font-bold mb-6">{{ user.username }}'s Profile</h1>
 
-    <div class="user-info bg-gray-800 p-4 rounded-lg shadow-md mb-6">
+    <div class="bg-gray-800 p-4 rounded-lg shadow-md mb-6">
       <p class="text-white text-lg mb-2"><strong>Username:</strong> {{ user.username }}</p>
       <p class="text-white text-lg"><strong>Email:</strong> {{ user.email }}</p>
     </div>
 
-    <div class="saved-games bg-gray-900 p-6 rounded-lg shadow-md">
+    <div class="bg-gray-900 p-6 rounded-lg shadow-md">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-semibold text-white">Saved Games</h2>
-        <div class="select-wrapper">
+        <div class="relative inline-block">
           <label for="sort" class="text-white mr-2">Sort By:</label>
-          <select id="sort" v-model="sortOption" @change="sortGames" class="p-2 rounded bg-gray-800 text-white">
+          <select id="sort" v-model="sortOption" @change="sortGames"
+            class="appearance-none p-2 pr-8 rounded bg-gray-800 text-white border border-gray-600 cursor-pointer focus:outline-none focus:shadow-outline-blue">
             <option value="date">Date Added</option>
             <option value="rating">User Rating</option>
             <option value="completed">Date Completed</option>
           </select>
+          <span class="absolute top-1/2 right-2 transform -translate-y-1/2 text-white pointer-events-none">▼</span>
         </div>
       </div>
-      <div class="games-list grid grid-cols-5 gap-4">
+      <div class="grid grid-cols-5 gap-4">
         <div v-for="game in sortedUserGames" :key="game.id"
-          class="game-item bg-gray-800 p-2 rounded-lg shadow-md cursor-pointer transform transition-transform duration-200 hover:scale-105"
+          class="bg-gray-800 p-2 rounded-lg shadow-md cursor-pointer transform transition-transform duration-200 hover:scale-105"
           @click="navigateToEdit(game.id)">
           <GameSearchComponent :name="game.name" :cover="game.cover" :id="game.id" />
         </div>
@@ -112,90 +114,3 @@ onMounted(() => {
   fetchUserProfile()
 })
 </script>
-
-<style scoped>
-.user-profile {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.user-info {
-  background-color: #2d3748;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.saved-games {
-  background-color: #1a202c;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.games-list {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1rem;
-}
-
-.game-item {
-  background-color: #2d3748;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.game-item:hover {
-  transform: scale(1.05);
-}
-
-button {
-  background-color: #4299e1;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: bold;
-  color: #fff;
-  transition: background-color 0.2s;
-}
-
-button:hover {
-  background-color: #2b6cb0;
-}
-
-.select-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding: 0.5rem;
-  padding-right: 2rem; /* Agrega espacio para la flecha */
-  border-radius: 0.5rem;
-  background-color: #2d3748;
-  color: white;
-  border: 1px solid #4a5568;
-  cursor: pointer;
-}
-
-select:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.6);
-}
-
-.select-wrapper::after {
-  content: '▼';
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: white;
-}
-</style>
